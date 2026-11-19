@@ -76,6 +76,11 @@ Present the result plainly, per horizon (0.25L, 0.5L, 1L, 2L = a quarter, half, 
   `excessSigma` with `excessCI95` (how much better or worse than ordinary windows, in the pattern's own swings),
   and `q` (corrected p-value; below 0.05 is what an edge needs).
 - `priceLevels` (p10, median, p90) are where past matches ended up, translated to today's price. They are not a forecast.
+- Each horizon also has `tests`, the full statistics: `tTest` and `wilcoxon` (is the excess different from zero),
+  `binomial` (up share against the ordinary base rate), `kolmogorovSmirnov` and `mannWhitney` (the whole outcome
+  distribution against ordinary windows), `spearman` (did closer matches do better), `effect.cohensD`, and `stability`
+  (early against late history; `topSymbol` and `topShare` show whether one symbol drives the result, `meanExTop` is the
+  mean without it). Mention stability whenever one symbol has a large share or early and late history disagree.
 - End with the `notice`, and the glossary link if the user wants to understand a term: https://www.marivista.tech/learn/
 
 Example wording: "On BTC 4h, the last 60 candles matched 27 earlier windows in 22 independent clusters. At one pattern
