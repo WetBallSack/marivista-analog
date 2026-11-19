@@ -87,6 +87,22 @@ Example wording: "On BTC 4h, the last 60 candles matched 27 earlier windows in 2
 length ahead the verdict is none: what followed was no different from an ordinary stretch of the market. This
 describes what happened after similar past patterns; it is not investment advice."
 
+## 3b. Or pay per search with x402 (no sign-in needed)
+
+`GET https://txbcfaqwyxmhkdydrdml.supabase.co/functions/v1/x402-search?symbol=BTCUSDT&interval=4h&bars=60`
+returns HTTP 402 with the terms: 0.05 USDT or USDC on BNB Smart Chain (`eip155:56`), `exact` scheme, Permit2. Only
+wallets with an Agent ID are served, and a search that fails is never settled.
+
+1. Before the first payment, ask the user to approve the Permit2 contract (`0x000000000022D473030F116dDEE9F6B43aC78BA3`)
+   for a **limited** amount, for example exactly 0.5 USDT (10 searches), with a previewed and confirmed `contract-call`.
+   Never let the payment step create an unlimited approval.
+2. `baw x402-payment preview --paymentRequirements <PAYMENT-REQUIRED header or body> --json`. Show the user the
+   amount, token, network, recipient and whether another approval is needed. If it still needs an approval, stop and
+   go back to step 1.
+3. Only after the user confirms: `baw x402-payment sign --paymentId <id> --selectedIndex <index> --json`, then repeat the
+   GET with the `PAYMENT-SIGNATURE` header. The response has the same fields as `search` below, plus `payment` with the
+   settlement transaction.
+
 ## 4. Buy queries or Pro
 
 - Queries: `{"action":"prepare","op":"buyQueries","packs":1,"token":"USDT"}` (20 queries per 1 USD pack, 1–100 packs).
